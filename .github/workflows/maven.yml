@@ -55,7 +55,9 @@ jobs:
         run: mvn dependency:resolve
 
       - name: Install Trivy
-        run: sudo apt-get install -y trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          sudo mv trivy /usr/local/bin/
 
       - name: Run Trivy FS Scan
         run: trivy fs --scanners vuln .
