@@ -40,3 +40,16 @@ jobs:
       run: sudo apt install gitleaks -y
     - name: Gitleaks Code Scan
       run: gitleaks detect source -r gitleaks-report.json -f json
+    
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    
+    - name: Resolve Maven dependencies
+      run: mvn dependency:resolve
+
+
