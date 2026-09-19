@@ -1,3 +1,12 @@
+name: Security Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:   # allows manual run from Actions tab
+
 jobs:
   security-check:
     runs-on: ubuntu-latest
@@ -5,11 +14,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
@@ -17,11 +28,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
       - name: Resolve Maven dependencies
         run: mvn dependency:resolve
+
       - name: Install Trivy
         run: |
           curl -sL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
           sudo mv ./bin/trivy /usr/local/bin/
+
       - name: Run Trivy FS Scan
         run: trivy fs --format table --output fs-report.json .
