@@ -94,4 +94,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: user/app:latest,user/app:${{ github.run_number }}
+          tags: chetan961/app:latest,chetan961/app:${{ github.run_number }}
