@@ -91,6 +91,9 @@ jobs:
     needs: build_project_and_sonar_scan
     steps:
       - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
       - uses: actions/checkout@v4
         with:
           name: app-jar
